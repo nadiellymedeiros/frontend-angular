@@ -1,0 +1,118 @@
+<nav>
+  <div class="bland">
+    <h1>MXM-WebDiet</h1>
+  </div>
+</nav>
+
+<div class="bodyHome">
+  <h1>Crie sua dieta</h1>
+  <form [formGroup]="formularioDieta">
+    <div class="input">
+      <input
+        type="text"
+        formControlName="nome"
+        placeholder="Informe seu nome"
+        class="form-control"
+      />
+      <div
+        class="errorInput"
+        *ngIf="formularioDieta.get('nome')?.errors?.['required'] && formularioDieta.get('nome')?.touched"
+      >
+        <span class="error-message">Por favor, preencha seu nome.</span>
+      </div>
+      <div
+        class="errorInput"
+        *ngIf="
+          formularioDieta.get('nome')?.invalid &&
+          formularioDieta.get('nome')?.dirty
+        "
+      >
+        <div *ngIf="formularioDieta.get('nome')?.errors?.['required']">
+          O nome é obrigatório.
+        </div>
+        <div *ngIf="formularioDieta.get('nome')?.errors?.['minlength']">
+          O nome deve ter pelo menos 8 caracteres.
+        </div>
+        <div *ngIf="formularioDieta.get('nome')?.errors?.['pattern']">
+          O nome deve conter apenas letras e espaços.
+        </div>
+      </div>
+    </div>
+
+    <div class="input">
+      <input
+        type="text"
+        formControlName="cpf"
+        placeholder="Informe seu CPF"
+        class="form-control"
+      />
+      <div
+        class="errorInput"
+        *ngIf="formularioDieta.get('cpf')?.errors?.['required'] && formularioDieta.get('cpf')?.touched"
+      >
+        <span class="error-message">Por favor, preencha seu cpf.</span>
+      </div>
+      <div
+        class="errorInput"
+        *ngIf="
+          formularioDieta.get('cpf')?.invalid &&
+          formularioDieta.get('cpf')?.dirty
+        "
+      >
+        <div *ngIf="formularioDieta.get('cpf')?.errors?.['required']">
+          O CPF é obrigatório.
+        </div>
+        <div *ngIf="formularioDieta.get('cpf')?.errors?.['pattern']">
+          O CPF deve conter apenas números e ter 11 dígitos.
+        </div>
+      </div>
+    </div>
+
+    <div class="btnCreateDiet">
+      <button class="btn" type="submit" (click)="criarPrompt()">
+        Criar Dieta
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="bodyDieta" *ngIf="dietaDisponivel" id="dietaSection">
+  <div class="titles">
+    <h1>Seja bem-vinda, {{ nome }}</h1>
+    <h2>Sua dieta:</h2>
+  </div>
+
+  <div class="dietas">
+    <div class="dieta">{{ dieta }}</div>
+  </div>
+
+  <div class="btnHistorico">
+    <button class="btn" type="button" (click)="openHistorico(cpf)">
+      Ver Histórico
+    </button>
+  </div>
+</div>
+
+<div class="historicoSection" *ngIf="historicoDisponivel">
+  <div class="historico">
+    <div class="modalHistorico">
+      <div class="modalHeader">
+        <h1 class="modalTitle">Histórico</h1>
+      </div>
+
+      <div class="modalContent">
+        <div *ngFor="let item of historico">
+          <div class="modalBody">
+            <p>Criado em: {{ item.criadoEm | date : "dd/MM/yyyy HH:mm:ss" }}</p>
+            <p>Dieta:{{ item.text }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modalFooter">
+        <button type="button" class="btn" (click)="closeHistorico()">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
